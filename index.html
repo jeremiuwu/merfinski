@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SolanaBot.lol - Fastest Solana Airdrop Bot</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0a0a0a;
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated gradient background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 30%, #16213e 60%, #0f3460 100%);
+            background-size: 400% 400%;
+            animation: gradientFlow 15s ease infinite;
+            z-index: -2;
+        }
+
+        @keyframes gradientFlow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* Subtle grid pattern */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(153, 69, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(153, 69, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            padding: 24px 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(20px);
+            background: rgba(10, 10, 10, 0.8);
+            border-bottom: 1px solid rgba(153, 69, 255, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #9945ff 0%, #14f195 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -1px;
+        }
+
+        .stats {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 12px 24px;
+            background: rgba(153, 69, 255, 0.05);
+            border-radius: 16px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(153, 69, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            background: rgba(153, 69, 255, 0.1);
+            border-color: rgba(153, 69, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .stat-number {
+            font-size: 20px;
+            font-weight: 700;
+            color: #14f195;
+            display: block;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 4px;
+            font-weight: 500;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 80px 48px;
+            text-align: center;
+            position: relative;
+        }
+
+        /* Floating orbs */
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(40px);
+            opacity: 0.6;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, #9945ff 0%, transparent 70%);
+            top: 20%;
+            left: 15%;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, #14f195 0%, transparent 70%);
+            top: 60%;
+            right: 20%;
+            animation-delay: -4s;
+        }
+
+        .orb-3 {
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, #ff6b9d 0%, transparent 70%);
+            bottom: 30%;
+            left: 70%;
+            animation-delay: -2s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            33% { transform: translateY(-30px) scale(1.1); }
+            66% { transform: translateY(15px) scale(0.9); }
+        }
+
+        .hero-title {
+            font-size: clamp(3.5rem, 10vw, 7rem);
+            font-weight: 900;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, #9945ff 0%, #14f195 50%, #ff6b9d 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            background-size: 200% 200%;
+            animation: gradientShift 4s ease-in-out infinite;
+            line-height: 0.9;
+            letter-spacing: -2px;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.25rem, 3vw, 1.75rem);
+            margin-bottom: 40px;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 400;
+            line-height: 1.4;
+            max-width: 600px;
+        }
+
+        .connect-wallet-btn {
+            background: linear-gradient(135deg, #9945ff 0%, #14f195 100%);
+            border: none;
+            padding: 20px 48px;
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            text-transform: none;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 80px;
+            box-shadow: 0 8px 32px rgba(153, 69, 255, 0.3);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .connect-wallet-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 16px 48px rgba(153, 69, 255, 0.4);
+        }
+
+        .connect-wallet-btn:active {
+            transform: translateY(-1px) scale(1.01);
+        }
+
+        .connect-wallet-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s;
+        }
+
+        .connect-wallet-btn:hover::before {
+            left: 100%;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 32px;
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        .feature {
+            background: rgba(255, 255, 255, 0.02);
+            padding: 32px;
+            border-radius: 24px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(153, 69, 255, 0.5), transparent);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .feature:hover {
+            transform: translateY(-8px);
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(153, 69, 255, 0.2);
+            box-shadow: 0 20px 60px rgba(153, 69, 255, 0.15);
+        }
+
+        .feature:hover::before {
+            opacity: 1;
+        }
+
+        .feature-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .feature-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #14f195;
+            line-height: 1.2;
+        }
+
+        .feature-description {
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+            font-weight: 400;
+        }
+
+        footer {
+            padding: 48px;
+            text-align: center;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(153, 69, 255, 0.1);
+        }
+
+        .footer-text {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 14px;
+            font-weight: 400;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            header {
+                padding: 20px 24px;
+                flex-direction: column;
+                gap: 24px;
+            }
+
+            .stats {
+                gap: 16px;
+            }
+
+            .stat-item {
+                padding: 8px 16px;
+            }
+
+            main {
+                padding: 60px 24px;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+
+            .connect-wallet-btn {
+                padding: 16px 40px;
+                font-size: 16px;
+            }
+
+            .orb {
+                display: none;
+            }
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Selection styling */
+        ::selection {
+            background: rgba(153, 69, 255, 0.3);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    
+    <div class="container">
+        <header>
+            <div class="logo">SolanaBot.lol</div>
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-number" id="activeUsers">2,147</span>
+                    <span class="stat-label">Active Users</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">99.8%</span>
+                    <span class="stat-label">Success Rate</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">24/7</span>
+                    <span class="stat-label">Monitoring</span>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <h1 class="hero-title">Fastest Solana Airdrop Bot</h1>
+            <p class="hero-subtitle">Join ALL Solana airdrops automatically with our lightning-fast bot</p>
+            
+            <button class="connect-wallet-btn" onclick="openModal()">
+                🚀 Connect Wallet & Start Earning
+            </button>
+            
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">⚡</div>
+                    <h3 class="feature-title">Lightning Fast</h3>
+                    <p class="feature-description">The fastest bot on the market - never miss an airdrop again with our optimized infrastructure and instant execution</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">💰</div>
+                    <h3 class="feature-title">Only 5% Fee</h3>
+                    <p class="feature-description">Keep 95% of your airdrops! Our transparent fee structure means maximum profits for you with no hidden costs</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🔄</div>
+                    <h3 class="feature-title">Auto-Join Everything</h3>
+                    <p class="feature-description">Set it and forget it - we monitor and join ALL Solana airdrops automatically, 24/7 without any manual intervention</p>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p class="footer-text">© 2025 SolanaBot.lol - The #1 Solana Airdrop Bot | Not affiliated with Solana Labs</p>
+        </footer>
+    </div>
+
+    <script>
+        // Dynamic user counter with more realistic behavior
+        function updateActiveUsers() {
+            const userCounter = document.getElementById('activeUsers');
+            let currentUsers = parseInt(userCounter.textContent.replace(',', ''));
+            
+            setInterval(() => {
+                // More realistic user fluctuation
+                const change = Math.random() > 0.4 ? 
+                    Math.floor(Math.random() * 8) + 1 : 
+                    -Math.floor(Math.random() * 3);
+                
+                currentUsers = Math.max(2000, Math.min(9999, currentUsers + change));
+                userCounter.textContent = currentUsers.toLocaleString();
+            }, 2500);
+        }
+
+        // Modal function (placeholder for wallet connection)
+        function openModal() {
+            alert('🚀 Wallet Connection\n\nConnecting to your Solana wallet...\n\nSupported wallets:\n• Phantom\n• Solflare\n• Backpack\n• Glow\n\nThis would open the actual wallet selection modal in production!');
+        }
+
+        // Smooth mouse parallax effect for orbs
+        document.addEventListener('mousemove', (e) => {
+            const orbs = document.querySelectorAll('.orb');
+            const mouseX = (e.clientX / window.innerWidth) - 0.5;
+            const mouseY = (e.clientY / window.innerHeight) - 0.5;
+            
+            orbs.forEach((orb, index) => {
+                const speed = (index + 1) * 20;
+                const x = mouseX * speed;
+                const y = mouseY * speed;
+                orb.style.transform = `translate(${x}px, ${y}px)`;
+            });
+        });
+
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            updateActiveUsers();
+            
+            // Add smooth entrance animation
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                document.body.style.transition = 'opacity 0.8s ease';
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+
+        // Add some interactive button feedback
+        document.querySelector('.connect-wallet-btn').addEventListener('click', function() {
+            this.style.transform = 'translateY(-1px) scale(0.98)';
+            setTimeout(() => {
+                this.style.transform = '';
+            }, 150);
+        });
+    </script>
+</body>
+</html>
